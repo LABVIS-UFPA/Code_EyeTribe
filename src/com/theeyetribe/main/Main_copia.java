@@ -39,17 +39,29 @@ public class Main_copia {
     static BufferedReader abrirArq;
     
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        
+
+
+        if(args.length > 0){
+            File f = new File(args[0]);
+            f.createNewFile();
+            if(f.isFile()){
+                arq = f;
+                System.out.println(arq.getAbsolutePath());
+            }
+        }
+
         try {
-            fw = new FileWriter(arq, true);
+            fw = new FileWriter(arq.getAbsolutePath(), args.length > 1 && args[1].equals("true"));
             
             escrever = new BufferedWriter(fw);
+
+            resultado = new PrintWriter(escrever);
             
         } catch (IOException ex) {
             Logger.getLogger(Main_copia.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        resultado = new PrintWriter(arq);
+
         
         GazeManager gm = GazeManager.getInstance(); // Instancia Servidor
         
@@ -85,17 +97,11 @@ public class Main_copia {
                         
             System.out.println(ponto + "\t" + fixo + "\t" + tempo + "\n"); //Mostrar ponto
                         
-            escrever = new BufferedWriter(fw);
-            
-            try {
-                
-                escrever.write(ponto.x + "\t" + ponto.y + "\t" + fixo + "\t" + tempo);
-                escrever.newLine();
-                escrever.flush();
-                
-            } catch (IOException ex) {
-                Logger.getLogger(Main_copia.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            escrever = new BufferedWriter(fw);
+
+            resultado.println(ponto.x + "\t" + ponto.y + "\t" + fixo + "\t" + tempo);
+            resultado.flush();
+
             
         }
         
