@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -41,6 +42,7 @@ public class Main_copia {
     public static void main(String[] args) throws FileNotFoundException, IOException {
 
 
+        System.out.println("Argumentos:  "+ Arrays.toString(args));
         if(args.length > 0){
             File f = new File(args[0]);
             f.createNewFile();
@@ -74,6 +76,7 @@ public class Main_copia {
         gm.addGazeListener(gz);
         
     }
+
     
     //Clasee de atualização
     public static class mostrarPosicaoOlhinho implements IGazeListener{
@@ -95,7 +98,7 @@ public class Main_copia {
             String tempo = gazeData.timeStampString;
             
                         
-            System.out.println(ponto + "\t" + fixo + "\t" + tempo + "\n"); //Mostrar ponto
+//            System.out.println(ponto + "\t" + fixo + "\t" + tempo + "\n"); //Mostrar ponto
                         
 //            escrever = new BufferedWriter(fw);
 
