@@ -1,0 +1,22 @@
+.heatmap {
+    background-image: url(data/fig_2.png);
+    position:absolute;
+    left:0;
+    top:0;
+    width:840px;
+    height:468px;
+}
+
+.cnt_2 {
+    position:absolute;
+    left:0;
+    top:0;
+    width:840px;
+    height:468px;
+}
+
+.heatmap-canvas{
+    position:absolute;
+    left:0;
+    top:0;
+}
