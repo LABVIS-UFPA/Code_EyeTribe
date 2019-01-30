@@ -11,11 +11,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,37 +45,131 @@ public class Main_copia {
 
 
         System.out.println("Argumentos:  "+ Arrays.toString(args));
-        if(args.length > 0){
-            File f = new File(args[0]);
-            f.createNewFile();
-            if(f.isFile()){
-                arq = f;
-                System.out.println(arq.getAbsolutePath());
+        
+        String header = "X\tY\tFixo\tTimestamp";
+        String webcamname = "Integrated Webcam";
+        String screenname = "screen-capture-recorder";
+        String framerate = "20";
+        String outdir = "";
+        String outname = "teste";
+        
+        boolean hasheader = true;
+        boolean storeWebcam = true;
+        boolean storeScreen = true;
+        boolean storeEyetracker = true;
+        boolean appendMode = false;
+        
+        for(int i=0;i<args.length;i++){
+            if(args[i].toLowerCase().equals("-oname")){
+                outname = args[i+1];
+                File f = new File(outdir+File.separator+outname+".txt");
+                f.createNewFile();
+                if(f.isFile()){
+                    arq = f;
+                    System.out.println("Output file: "+arq.getAbsolutePath());
+                }
+            }else if(args[i].toLowerCase().equals("-noheader")){
+                hasheader = false;
+            }else if(args[i].toLowerCase().equals("-noscreen")){
+                storeScreen = false;
+            }else if(args[i].toLowerCase().equals("-nowebcam")){
+                storeWebcam = false;
+            }else if(args[i].toLowerCase().equals("-noeyetracker")){
+                storeEyetracker = false;
+            }else if(args[i].toLowerCase().equals("-webcamname")){
+                webcamname = args[i+1];
+            }else if(args[i].toLowerCase().equals("-screenname")){
+                screenname = args[i+1];
+            }else if(args[i].toLowerCase().equals("-framerate")){
+                framerate = args[i+1];
+            }else if(args[i].toLowerCase().equals("-append")){
+                appendMode = true;
+            }else if(args[i].toLowerCase().equals("-dir")){
+                File f = new File(args[i+1]);
+                System.out.println("Tentativa: "+f.getAbsolutePath());
+                if(f.isDirectory()){
+                    outdir = f.getAbsolutePath();
+                    System.out.println("Output dir: "+outdir);
+                }
             }
+            
         }
+        
 
         try {
-            fw = new FileWriter(arq.getAbsolutePath(), args.length > 1 && args[1].equals("true"));
+            fw = new FileWriter(arq.getAbsolutePath(), appendMode);
             
             escrever = new BufferedWriter(fw);
 
             resultado = new PrintWriter(escrever);
             
+            if(hasheader){
+                resultado.println(header);
+            }
         } catch (IOException ex) {
             Logger.getLogger(Main_copia.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        OutputStream out1=null, out2=null;
+        if(storeWebcam){
+            Process p1 = Runtime.getRuntime().exec("ffmpeg -framerate "+framerate+" -f dshow -i video=\""+webcamname+"\":audio=\"Microfone (Realtek High Definition Audio)\" "+outdir+File.separator+outname+"_webcam.mp4");
+            out1 = p1.getOutputStream();
+        }
+        
+        if(storeScreen){
+            Process p2 = Runtime.getRuntime().exec("ffmpeg -framerate "+framerate+" -f dshow -i video=\""+screenname+"\" "+outdir+File.separator+outname+"_screen.mp4");
+            out2 = p2.getOutputStream();
+        }
+        
+        GazeManager gm = null;
+        if(storeEyetracker){
+            gm = GazeManager.getInstance(); // Instancia Servidor
+        
+            System.out.println(gm.activate()); //Servidor Ativo?
+
+            System.out.println(gm.getVersion()); // vrsão da API
+
+            mostrarPosicaoOlhinho gz = new mostrarPosicaoOlhinho();
+
+            gm.addGazeListener(gz);
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        Scanner s = new Scanner(System.in);
+        String str = s.next();
 
         
-        GazeManager gm = GazeManager.getInstance(); // Instancia Servidor
         
-        System.out.println(gm.activate()); //Servidor Ativo?
-
-        System.out.println(gm.getVersion()); // vrsão da API
+        if(out1 != null){
+            out1.write("q".getBytes());
+            out1.flush();
+        }
         
-        mostrarPosicaoOlhinho gz = new mostrarPosicaoOlhinho();
+        if(out2 != null){
+            out2.write("q".getBytes());
+            out2.flush();
+        }
+        
+        resultado.close();
+        if(storeEyetracker && gm != null && gm.isActivated()){
+            gm.deactivate();
+        }
 
-        gm.addGazeListener(gz);
+        
+        
+        
+        System.out.println("exited");
+        
+
         
     }
 

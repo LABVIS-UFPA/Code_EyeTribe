@@ -14,9 +14,15 @@ socket.on("createTest", function(socket, msg){
 
     subprocess = spawn('java',  [
         "-jar",
-        "C:\\Users\\Gustavo\\IdeaProjects\\Tribe_Code\\out\\artifacts\\Tribe_Code_jar\\Tribe_Code.jar",
-        msg.name+".txt",
-        msg.ft
+        ".\\bin\\Tribe_Code.jar ",
+        "-dir",
+        ".\\data\\",
+        "-oname",
+        msg.name,
+        "-framerate",
+        "10",
+        "-noeyetracker",
+        msg.ft==="true"?"-append":""
     ]);
 
     subprocess.on("exit", function () {
@@ -31,7 +37,9 @@ socket.on("createTest", function(socket, msg){
 
 }).on("pause", function(socket, msg){
     console.log("pause");
-    if(subprocess)
-        subprocess.kill();
+    if(subprocess) {
+        subprocess.stdin.end('q\r\n\n\r');
+        //subprocess.kill();
+    }
 });
 console.log(socket.callbacks);
