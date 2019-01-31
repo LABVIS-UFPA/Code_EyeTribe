@@ -14,15 +14,23 @@ socket.on("createTest", function(socket, msg){
 
     subprocess = spawn('java',  [
         "-jar",
+        //"./bin/Tribe_Code.jar",
         ".\\bin\\Tribe_Code.jar ",
         "-dir",
         ".\\data\\",
         "-oname",
         msg.name,
         "-framerate",
-        "10",
+        "15",
+        "-webcamname",
+        "HD Pro Webcam C920",
+        "-noscreen",
+        //"-screenname",
+        //"screen-capture-recorder",
+        "-microphonename",
+        "Microfone (Realtek Audio)",
         "-noeyetracker",
-        msg.ft==="true"?"-append":""
+        //msg.ft==="true"?"-append":""
     ]);
 
     subprocess.on("exit", function () {
