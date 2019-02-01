@@ -3,5 +3,7 @@
 /ColetaDosDados/nbproject/private/
 /Tribe_Code/build/
 /Tribe_Code/dist/
-/.idea/
+*/.idea/
 /node_modules/
+*/nbproject/private/private.properties
+Tribe_Code/nbproject/private/private.properties

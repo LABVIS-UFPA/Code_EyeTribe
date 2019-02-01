@@ -4,7 +4,15 @@
  * and open the template in the editor.
  */
 
+class ClientSocket{
+    constructor(clientsocket){
+        this.clientsocket = clientsocket;
+    }
 
+    send(act, msg){
+        this.clientsocket.send(JSON.stringify({act, msg}));
+    }
+}
 var ServerSocket  = function(port){
     var WebSocketServer = require('ws').Server;
     var self = this;
@@ -23,7 +31,7 @@ var ServerSocket  = function(port){
             //if (flags && !flags.binary) {
                 var objMsg = JSON.parse(message);
                 if (self.callbacks[objMsg.act])
-                    self.callbacks[objMsg.act](socket, objMsg.msg);
+                    self.callbacks[objMsg.act](new ClientSocket(socket), objMsg.msg);
             //}
         });
         

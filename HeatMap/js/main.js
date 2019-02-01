@@ -19,6 +19,15 @@ $(document).ready(function(){
     mysocket.on('metadata', (res) => {
         console.log(res.result);
     });
+    mysocket.on("using", (res)=>{
+        let $tr = $("#tr_"+res.name);
+        $tr.find("button.btnPause").removeAttr("disabled");
+        $tr.append($("<td/>").addClass(res.device).text(res.device));
+    });
+    mysocket.on("notusing", (res)=>{
+        let $tr = $("#tr_"+res.name);
+        $tr.find("td."+res.device).remove();
+    });
 
 
 
@@ -29,7 +38,7 @@ $(document).ready(function(){
     let cont = 0;
     $("#btnAddButton").click(function(){
         let testName = "Teste_"+(cont++);
-        let tr = $("<tr/>");
+        let tr = $("<tr/>").attr("id", "tr_"+testName);
         tr.get(0).__testName__ = testName;
         $("#divTests")
             .append(tr
@@ -37,7 +46,7 @@ $(document).ready(function(){
                 .append($("<td/>")
                     .append($("<button/>").text("Play").addClass("btnPlay").attr("data-first", "false")))
                 .append($("<td/>")
-                    .append($("<button/>").text("Pause").addClass("btnPause")))
+                    .append($("<button/>").text("Pause").addClass("btnPause").attr("disabled", "true")))
                 .append($("<td/>")
                     .append($("<button/>").text("Show").addClass("btnShow"))));
 
@@ -45,15 +54,26 @@ $(document).ready(function(){
 
     });
 
+    $(".checkCapture").change(function(e){
+        mysocket.send("change_capture", {
+            type: $(this).attr("name"),
+            value: $(this).is(":checked")
+        });
+    });
+
 
     $("#divTests").on("click", "tr > td > button.btnPlay", function(){
+        $("#divTests").find("button").attr("disabled", "true");
         let testName = $(this).parent().parent().get(0).__testName__;
         mysocket.send("createTest", {name: testName, ft: $(this).attr("data-first")});
         $(this).attr("data-first", "true");
 
     }).on("click", "tr > td > button.btnPause", function(){
         mysocket.send("pause");
-
+        let table = $("#divTests");
+        table.find("button.btnPause").attr("disabled","true");
+        table.find("button.btnPlay").removeAttr("disabled");
+        table.find("button.btnShow").removeAttr("disabled");
     }).on("click", "tr > td > button.btnShow", function(){
         let testName = $(this).parent().parent().get(0).__testName__;
         let IMGtype = $('input.radioIMGType:checked').val();
