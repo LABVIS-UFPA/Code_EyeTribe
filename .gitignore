@@ -1,9 +1,7 @@
-/ColetaDosDados/dist/
 /ColetaDosDados/build/
 /ColetaDosDados/nbproject/private/
 /Tribe_Code/build/
-/Tribe_Code/dist/
 */.idea/
 /node_modules/
-*/nbproject/private/private.properties
+*/nbproject/private/*
 Tribe_Code/nbproject/private/private.properties
