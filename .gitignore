@@ -6,4 +6,5 @@
 /node_modules/
 */nbproject/private/*
 Tribe_Code/nbproject/private/private.properties
-./data/*.mp4
+HeatMap/data/*.mp4
+HeatMap/data/*.tsv

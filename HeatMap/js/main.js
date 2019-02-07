@@ -1,18 +1,30 @@
 
-
+let img_keys = {eyetracker: "eye.png", screen: "monitor.png", webcam: "webcam.png"};
 
 $(document).ready(function(){
 
 
     let key;
-    const mysocket = new AppSocket();
+    let mysocket = new AppSocket();
+
 
     mysocket.on("open", function(){
         console.log("deu certo");
-        mysocket.send("tools", "olá")
-    });
+        mysocket.send("tools", "olá");
+        $("#txtStatus").text("Online");
+        $("#imgStatus").attr("src", "./img/bullet_green.png");
 
-    mysocket.on("connect", (res) => {
+    }).on("error", function(){
+        console.log("deu erro");
+        $("#txtStatus").text("Erro");
+        $("#imgStatus").attr("src", "./img/bullet_error.png");
+
+    }).on("close", function(){
+        console.log("FECHOU!");
+        $("#txtStatus").text("Offline");
+        $("#imgStatus").attr("src", "./img/bullet_red.png");
+
+    }).on("connect", (res) => {
         console.log('oq o cliente recebe:', res.connection_key);
         key = res.connection_key;
     });
@@ -22,7 +34,7 @@ $(document).ready(function(){
     mysocket.on("using", (res)=>{
         let $tr = $("#tr_"+res.name);
         $tr.find("button.btnPause").removeAttr("disabled");
-        $tr.append($("<td/>").addClass(res.device).text(res.device));
+        $tr.append($("<td/>").addClass(res.device).append($("<img/>").attr("src", "./img/"+img_keys[res.device])));
     });
     mysocket.on("notusing", (res)=>{
         let $tr = $("#tr_"+res.name);

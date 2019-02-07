@@ -30,11 +30,13 @@ var AppSocket = function (port) {
     socket.onerror = function (e) {
         console.log('ERROR');
         console.log(e);
+        if(myappsocket.callbacks.error) myappsocket.callbacks.error();
     };
 
     socket.onclose = function () {
         console.log('CLOSED');
         myappsocket.status.open = false;
+        if(myappsocket.callbacks.close) myappsocket.callbacks.close();
     };
 
     socket.onmessage = function (e) {
@@ -50,7 +52,9 @@ var AppSocket = function (port) {
 
 //Enviando requisições e recencendo no callback.
 AppSocket.prototype.send = function (act, msg) {
-    this.socket.send(JSON.stringify({act: act, msg: msg}));
+    if(this.status.open) {
+        this.socket.send(JSON.stringify({act: act, msg: msg}));
+    }
 };
 
 AppSocket.prototype.on = function(act, callback){
