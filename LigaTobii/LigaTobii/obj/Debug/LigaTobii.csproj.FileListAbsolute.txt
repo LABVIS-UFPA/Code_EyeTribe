@@ -1,0 +1,8 @@
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\obj\Debug\LigaTobii.csprojAssemblyReference.cache
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\obj\Debug\LigaTobii.csproj.CoreCompileInputs.cache
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\obj\Debug\LigaTobii.exe
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\obj\Debug\LigaTobii.pdb
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\bin\Debug\Tobii.EyeX.Client.dll
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\bin\Debug\LigaTobii.exe.config
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\bin\Debug\LigaTobii.exe
+C:\Users\Anderson Soares\Google Drive\workspace\C#\LigaTobii\LigaTobii\bin\Debug\LigaTobii.pdb

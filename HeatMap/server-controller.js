@@ -28,19 +28,7 @@ socket.on("createTest", function(socket, msg){
     }
 
     if(hasEyeTracker){
-        process_eyetracker = spawn('java',  [
-            "-jar",
-            //"./bin/Tribe_Code.jar",
-            ".\\bin\\Tribe_Code.jar ",
-            "-dir",
-            "data\\",
-            "-oname",
-            msg.name,
-            "-nowebcam",
-            "-noscreen",
-            "-noeyetracker",
-            //msg.ft==="true"?"-append":""
-        ]);
+        process_eyetracker = exec('.\\bin\\LigaTobii.exe -o .\\data\\eye_'+msg.name+'.tsv');
 
         socket.send("using", {
             device: "eyetracker",
@@ -64,7 +52,8 @@ socket.on("createTest", function(socket, msg){
     }
 
     if(hasWebCam){
-        process_webcam = exec('ffmpeg -framerate 10 -f dshow -i video="Integrated Webcam":audio="Microfone (Realtek High Definition Audio)" "./data/webcam_'+msg.name+'.mp4"');
+        //process_webcam = exec('ffmpeg -framerate 10 -f dshow -i video="Integrated Webcam":audio="Microfone (Realtek High Definition Audio)" "./data/webcam_'+msg.name+'.mp4"');
+        process_webcam = exec('ffmpeg -framerate 10 -f dshow -i video="HD Pro Webcam C920":audio="Microfone (Realtek Audio)" "./data/webcam_'+msg.name+'.mp4"');
 
         socket.send("using", {
             device: "webcam",
